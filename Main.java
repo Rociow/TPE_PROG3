@@ -5,21 +5,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
 
+    static int totalPiezasObjetivo;
+    static List<Maquina> maquinas;
 
-        List<Maquina> maquinas = new ArrayList<>();
-        maquinas.add(new Maquina("M1",7));
-        maquinas.add(new Maquina("M2",3));
-        maquinas.add(new Maquina("M3",4));
-        maquinas.add(new Maquina("M4",1));
+    public static void main(String[] args) throws IOException {
+        leerArchivo("Configuracion.txt");
 
         Greedy solucionGr = new Greedy(maquinas);
 
-        System.out.println(solucionGr.GreedyMaquina(12));
+        System.out.println("Greedy: " + solucionGr.GreedyMaquina(12));
 
         Backtracking solucionBack = new Backtracking(maquinas);
 
-        System.out.println(solucionBack.backtrackingMaquina(12));
+        System.out.println("Backtracking: " + solucionBack.backtrackingMaquina(12));
+    }
+
+    static void leerArchivo(String nombreArchivo) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(nombreArchivo));
+        totalPiezasObjetivo = Integer.parseInt(br.readLine().trim());
+        maquinas = new ArrayList<>();
+        String linea;
+        while ((linea = br.readLine()) != null) {
+            String[] partes = linea.split(",");
+            maquinas.add(new Maquina(partes[0], Integer.parseInt(partes[1])));
+        }
+        br.close();
     }
 }
