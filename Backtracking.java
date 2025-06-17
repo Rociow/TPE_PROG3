@@ -3,9 +3,12 @@ import java.util.List;
 
 /*
 El árbol se genera a partir de la seleccion de la primer máquina en el ArrayList de máquinas.
-La poda aplicada consiste en evitar las soluciones duplicadas a partir de aplicar un índice como
+Se realiza una poda al evitar las combinaciones duplicadas aplicando un índice como
 parámetro, de esta manera, si ya existe una solución que consta de: (M1,7),(M3,4),(M4,1), no se
-genere otra solución que cambie de lugar las máquinas: (M3,4),(M4,1),(M1,7).
+genera otra solución que cambie de lugar las máquinas: (M3,4),(M4,1),(M1,7).
+También se realiza una poda al no explorar combinaciones que superen la cantidad de piezas objetivo.
+Los estados finales son aquellos donde la suma de piezas producidas alcanza exactamente el total requerido.
+Los estados solución son aquellos que además minimizan la cantidad total de máquinas utilizadas.
  */
 public class Backtracking {
     private List<Maquina> maquinas;
@@ -17,23 +20,12 @@ public class Backtracking {
         this.maquinas = maquinas;
     }
 
-    public void backtrackingMaquina(Integer piezas) {
+    public List<Maquina> backtrackingMaquina(Integer piezas) {
 
         List<Maquina> posibleSolucion = new ArrayList<>();
         backtrackingMaquina(piezas, posibleSolucion, 0, 0);
 
-        //Mostrar resultados
-        System.out.println("Backtracking");
-        System.out.print("Solución obtenida: ");
-        for (Maquina m : mejorSolucion) {
-            System.out.print(m.getNombre() + " ");
-        }
-        System.out.println();
-        int piezasTotales = mejorSolucion.stream().mapToInt(Maquina::getPiezas).sum();
-        System.out.println("Piezas producidas: " + piezasTotales);
-        System.out.println("Puestas en funcionamiento: " + mejorSolucion.size());
-        System.out.println("Estados generados: " + contador);
-
+        return mejorSolucion;
     }
 
     private void backtrackingMaquina(Integer piezas, List<Maquina> posibleSolucion, int piezasProducidas, int indice) {
@@ -65,4 +57,20 @@ public class Backtracking {
     private boolean esMejor(List<Maquina> posibleSolucion, List<Maquina> mejorSolucion) {
         return mejorSolucion.isEmpty() || posibleSolucion.size() < mejorSolucion.size();
     }
+
+    public void mostrarResultadosBacktracking(int piezas) {
+        List<Maquina> solucion = backtrackingMaquina(piezas);
+        int totalPiezas = solucion.stream().mapToInt(Maquina::getPiezas).sum();
+
+        System.out.println("Backtracking");
+        System.out.println("Solución obtenida: " + solucion);
+        System.out.println("Cantidad de piezas producidas: " + totalPiezas);
+        System.out.println("Cantidad de puestas en funcionamiento: " + solucion.size());
+        System.out.println("Costo (estados generados): " + contador);
+    }
+
+    public int getContador() {
+        return contador;
+    }
+
 }
