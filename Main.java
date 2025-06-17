@@ -10,10 +10,13 @@ public class Main {
         Configuracion config = leerArchivo("Configuracion.txt");
 
         Greedy solucionGr = new Greedy(config.maquinas);
-        solucionGr.greedyMaquina(config.totalPiezasObjetivo);
+
+        solucionGr.mostrarResultadosGreedy(config.totalPiezasObjetivo);
 
         Backtracking solucionBack = new Backtracking(config.maquinas);
-        solucionBack.backtrackingMaquina(config.totalPiezasObjetivo);
+
+        solucionBack.mostrarResultadosBacktracking(config.totalPiezasObjetivo);
+
     }
 
     static Configuracion leerArchivo(String nombreArchivo) throws IOException {
@@ -30,3 +33,4 @@ public class Main {
         return new Configuracion(totalPiezasObjetivo, maquinas);
     }
 }
+
