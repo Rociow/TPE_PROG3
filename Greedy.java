@@ -2,29 +2,27 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/*La solución está planteada en base a ordenar las máquinas que pueden producir
-* mayor cantidad de piezas a menor cantidad, de esta manera los candidatos que se tienen
-* en cuenta en primer lugar son aquellas maquinas que pueden producir más piezas,
-* para utilizar la menor cantidad de máquinas posible.
-* También se busca la eficiencia a partir del cálculo de cuántas piezas del total
-* puede producir el candidato seleccionado, para de esta manera evitar considerar
-* el mismo candidato muchas veces*/
+/*Los candidatos son las máquinas ordenadas de mayor a menor según la cantidad de piezas que pueden producir.
+* También se intenta producir la mayor cantidad posible de piezas con la máquina más eficiente.
+*/
 
 public class Greedy {
     private List<Maquina> maquinas;
     private List<Maquina> solucion;
+
+    private int candidatosConsiderados = 0;
 
     public Greedy(List<Maquina> maquinas) {
         solucion = new ArrayList<>();
         this.maquinas = maquinas;
     }
 
-    public void greedyMaquina(Integer piezas) {
+    public List<Maquina> GreedyMaquina(Integer piezas) {
         maquinas.sort(new MaquinaPorPiezasDesc());
 
         solucion = new ArrayList<>();
         int piezasProducidas = 0;
-        int candidatosConsiderados = 0;
+        candidatosConsiderados = 0;
 
         int i = 0;
         while (piezasProducidas < piezas && i < maquinas.size()) {
@@ -41,20 +39,23 @@ public class Greedy {
 
             i++;
         }
-        System.out.println("Greedy");
         if (piezasProducidas == piezas) {
-            System.out.print("Solución obtenida: ");
-            for (Maquina m : solucion) {
-                System.out.print(m.getNombre() + " ");
-            }
-            System.out.println();
-            System.out.println("Piezas producidas: " + piezasProducidas);
-            System.out.println("Puestas en funcionamiento: " + solucion.size());
-            System.out.println("Candidatos considerados: " + candidatosConsiderados);
+            return solucion;
         } else {
-            System.out.println("No se pudo alcanzar el objetivo con las máquinas disponibles.");
-            System.out.println("Piezas producidas: " + piezasProducidas);
-            System.out.println("Candidatos considerados: " + candidatosConsiderados);
+            return null;
         }
     }
+
+    public void mostrarResultadosGreedy(int piezas) {
+        List<Maquina> solucion = GreedyMaquina(piezas);
+        int totalPiezas = solucion != null ? solucion.stream().mapToInt(Maquina::getPiezas).sum() : 0;
+
+        System.out.println("Greedy");
+        System.out.println("Solución obtenida: " + solucion);
+        System.out.println("Cantidad de piezas producidas: " + totalPiezas);
+        System.out.println("Cantidad de puestas en funcionamiento: " + (solucion != null ? solucion.size() : 0));
+        System.out.println("Costo (candidatos considerados): " + candidatosConsiderados);
+    }
+
 }
+
