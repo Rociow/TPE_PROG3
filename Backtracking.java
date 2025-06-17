@@ -43,7 +43,7 @@ public class Backtracking {
                     if (posibleSolucion.size()<mejorSolucion.size() || mejorSolucion.isEmpty()){
                         backtrackingMaquina(piezas, posibleSolucion, piezasProducidas, i);
                     }
-                    posibleSolucion.removeLast();
+                    posibleSolucion.remove(posibleSolucion.size() - 1);
                     piezasProducidas -= m.getPiezas();
                 }
 
