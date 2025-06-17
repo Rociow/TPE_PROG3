@@ -12,24 +12,35 @@ public class Backtracking {
     private List<Maquina> mejorSolucion;
     private int contador;
 
-    public Backtracking(List<Maquina> maquinas){
+    public Backtracking(List<Maquina> maquinas) {
         mejorSolucion = new ArrayList<>();
         this.maquinas = maquinas;
     }
 
-    public List<Maquina> backtrackingMaquina(Integer piezas){
+    public void backtrackingMaquina(Integer piezas) {
 
         List<Maquina> posibleSolucion = new ArrayList<>();
-        backtrackingMaquina(piezas, posibleSolucion, 0,0);
+        backtrackingMaquina(piezas, posibleSolucion, 0, 0);
 
-        return mejorSolucion;
+        //Mostrar resultados
+        System.out.println("Backtracking");
+        System.out.print("Solución obtenida: ");
+        for (Maquina m : mejorSolucion) {
+            System.out.print(m.getNombre() + " ");
+        }
+        System.out.println();
+        int piezasTotales = mejorSolucion.stream().mapToInt(Maquina::getPiezas).sum();
+        System.out.println("Piezas producidas: " + piezasTotales);
+        System.out.println("Puestas en funcionamiento: " + mejorSolucion.size());
+        System.out.println("Estados generados: " + contador);
+
     }
 
-    private void backtrackingMaquina(Integer piezas, List<Maquina> posibleSolucion, int piezasProducidas, int indice){
-        contador++; //contador estados
+    private void backtrackingMaquina(Integer piezas, List<Maquina> posibleSolucion, int piezasProducidas, int indice) {
+        contador++; // contador estados
 
-        if (piezasProducidas==piezas){
-            if (esMejor(posibleSolucion, mejorSolucion)){
+        if (piezasProducidas == piezas) {
+            if (esMejor(posibleSolucion, mejorSolucion)) {
                 mejorSolucion = new ArrayList<>(posibleSolucion);
             }
         } else {
@@ -40,7 +51,7 @@ public class Backtracking {
                 if (piezasProducidas + m.getPiezas() <= piezas) {
                     posibleSolucion.add(m);
                     piezasProducidas += m.getPiezas();
-                    if (posibleSolucion.size()<mejorSolucion.size() || mejorSolucion.isEmpty()){
+                    if (posibleSolucion.size() < mejorSolucion.size() || mejorSolucion.isEmpty()) {
                         backtrackingMaquina(piezas, posibleSolucion, piezasProducidas, i);
                     }
                     posibleSolucion.remove(posibleSolucion.size() - 1);
@@ -51,7 +62,7 @@ public class Backtracking {
         }
     }
 
-    private boolean esMejor(List<Maquina> posibleSolucion,List<Maquina> mejorSolucion){
-            return mejorSolucion.isEmpty() || posibleSolucion.size() < mejorSolucion.size();
+    private boolean esMejor(List<Maquina> posibleSolucion, List<Maquina> mejorSolucion) {
+        return mejorSolucion.isEmpty() || posibleSolucion.size() < mejorSolucion.size();
     }
 }
